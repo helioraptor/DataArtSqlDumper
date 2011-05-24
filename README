@@ -1,0 +1,10 @@
+DataArtSqlDumper.exe - creates script to populate database with data!
+
+time spent: 
+6hr + 1.5 hr for repo setup, writing this, etc.
+
+program was compiled using VS2005, MSSQL2005 
+output was tested using RedGate Data Compare 8.0, which is my favorite tool for database syncronization.
+
+Andrey Zorin
+24.05.2001

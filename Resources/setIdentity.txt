@@ -1,0 +1,5 @@
+if exists(select 1 from sys.columns c where c.object_id = object_id('{0}') and is_identity = 1)
+	set identity_insert [{0}] {1}
+go	
+ALTER TABLE [{0}] {2}CHECK CONSTRAINT ALL	
+go

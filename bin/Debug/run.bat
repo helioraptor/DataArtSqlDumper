@@ -1,0 +1,2 @@
+DataArtSqlDumper.exe "data source=USCONCEPTS\USC;initial catalog=Northwind;Connection Lifetime=120;Connection Timeout=60;Timeout=60;User=sa;Password=crash" "out.sql"
+osql -S"USCONCEPTS\USC" -Usa -Pcrash -dNorthwind2 -i"out.sql" 

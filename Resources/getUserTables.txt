@@ -1,0 +1,35 @@
+/*tables*/
+Declare @t table(object_id int, level int)
+
+/*objects who are not parents*/
+Insert @t(object_id, level) 
+select o.object_id, 0 from sys.tables o 
+where not exists(select 1 from sys.foreign_keys f 
+			   where o.object_id = f.referenced_object_id) 
+
+Declare @level int
+Set @level = 1
+
+WHILE(1=1)
+ BEGIN
+	Insert @t(object_id,level)
+	select distinct f.referenced_object_id, @level
+	from sys.foreign_keys f
+    join @t t on t.object_id = f.parent_object_id
+	where not exists(select 1 from @t t1 where t1.object_id = f.referenced_object_id)  
+	and not exists(select 1 from sys.foreign_keys f1 
+				   where f1.referenced_object_id = f.referenced_object_id 
+				   and f1.parent_object_id not in (select object_id from @t)
+				   --allow fishhook dependencies
+				   and f1.parent_object_id <> f1.referenced_object_id) 
+
+    if(0=@@ROWCOUNT)
+		break;
+
+	select @level = @level+1
+ END
+
+select o.name as [table]
+from sys.tables o
+join @t t on t.object_id = o.object_id
+order by t.level desc 
